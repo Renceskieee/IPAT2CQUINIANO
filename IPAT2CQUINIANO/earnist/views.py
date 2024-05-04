@@ -6,3 +6,8 @@ def main(request):
     #what you want to do
 
     return  render(request, 'main.html')
+
+def members(request):
+    #what you want to do
+
+    return  render(request, 'members.html')
