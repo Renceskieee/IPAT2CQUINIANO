@@ -80,7 +80,7 @@ def delete_record(request, pk):
     if  request.user.is_authenticated:
         delete_it = Record.objects.get(id=pk)
         delete_it.delete()
-        messages.success(request, "Member Has Been Removed...")
+        messages.success(request, "Member Has Been Removed!")
         return redirect('members')
 
     else:
