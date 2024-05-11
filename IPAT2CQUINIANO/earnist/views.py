@@ -19,7 +19,7 @@ def main(request):
             messages.success(request, "Successfully Logged In!")
             return redirect('main')
         else:
-            messages.success(request, "Invalid Account, Please Try Again...")
+            messages.success(request, "Invalid, Please Try Again...")
             return redirect('main')
     else:
 
@@ -43,12 +43,49 @@ def register(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, "Account Created!")
-            return redirect('main')
+            return redirect('register')
     else:
         form = SignUpForm
         return render(request,'register.html',{'form':form})
     
     return render(request,'register.html',{'form':form})
+
+def add_record(request):
+    forms = AddRecordForm(request.POST or None)
+    if  request.user.is_authenticated:
+        if request.method == 'POST':
+            add_record = forms.save()
+            messages.success(request, "New Member Added!")
+            return redirect('members')
+        return render(request, "add.html", {'forms':forms})
+    else:
+         messages.success(request, "Invalid Action...")
+         return redirect('main')
+
+def update_record(request, pk):
+    if  request.user.is_authenticated:
+        current_record = Record.objects.get(id=pk)
+        form = AddRecordForm(request.POST or None, instance=current_record )
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Successfully Updated!")
+            return redirect('members')
+        return render(request, "update.html", {'form':form})
+
+    else:
+         messages.success(request, "Invalid Action...")
+         return redirect('main')
+
+def delete_record(request, pk):
+    if  request.user.is_authenticated:
+        delete_it = Record.objects.get(id=pk)
+        delete_it.delete()
+        messages.success(request, "Member Has Been Removed...")
+        return redirect('members')
+
+    else:
+         messages.success(request, "Invalid Action...")
+         return redirect('main')
 
 def logout_user(request):
     logout(request)
