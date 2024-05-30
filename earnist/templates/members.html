@@ -1,0 +1,114 @@
+{% extends 'home2.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body::-webkit-scrollbar {
+        display: none;
+    }
+
+    .container {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    .table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 5%;
+        margin-bottom: 5%;
+    }
+    
+    .table th, .table td {
+        border: 1px solid #332D2D;
+        padding: 8px;
+        text-align: center;
+    }
+    
+    .table th {
+        background-color: #FFEA20;
+    }
+
+    .bg-image {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 30%;
+        height: 40%;
+        transform: translate(-50%, -50%);
+        opacity: 0.3; /* Adjust the opacity as needed */
+        z-index: 1; /* Ensure the image stays in the background */
+    }
+</style>
+
+{% if user.is_authenticated %}
+<img class="bg-image" src="{% static '/img/coderist-logo.png' %}" alt="Logo">
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No.</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Zipcode</th>
+                <th>Update</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if members %}
+                {% for record in members %}
+                    <tr>
+                        <td>{{ record.id }}</td>
+                        <td>{{ record.first_name }}</td>
+                        <td>{{ record.last_name }}</td>
+                        <td>{{ record.email }}</td>
+                        <td>{{ record.phone }}</td>
+                        <td>{{ record.address }}</td>
+                        <td>{{ record.city }}</td>
+                        <td>{{ record.state }}</td>
+                        <td>{{ record.zipcode }}</td>
+                        <td>
+                            <a href="{% url 'update_record' record.id  %}"> 
+                                <button class="btn btn-info" style="background-color: #332D2D; color: #FFEA20; border: 2px solid #FFEA20; padding: 10px 20px; border-radius: 5px; cursor: pointer;">Update</button>
+                            </a>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-warning" style="background-color: #332D2D; color: #DC4C64; border: 2px solid #DC4C64; padding: 10px 20px; border-radius: 5px; cursor: pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal{{ record.id }}">
+                                Remove
+                            </button>
+                        
+                            <div class="modal fade" id="exampleModal{{ record.id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ record.id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel{{ record.id }}">Confirm Removal</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to remove <strong>{{ record.first_name }} {{ record.last_name }}</strong>?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <a href="{% url 'delete_record' record.id  %}">
+                                                <button type="button" class="btn btn-danger">Remove</button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>                          
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+{% endblock %}
