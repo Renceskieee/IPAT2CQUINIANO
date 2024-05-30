@@ -77,8 +77,11 @@ WSGI_APPLICATION = 'IPAT2CQUINIANO.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'EARNIST',
+        'USER': 'postgres',
+        'PASSWORD': 'Laurence027',
+        'PORT': '5432',
     }
 }
 
